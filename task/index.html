@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+</head>
+<body>
+<div class="container">
+    <div id="list"></div>
+    <form class="user-form">
+        <div class="form-group">
+            <label for="user">Name</label>
+            <input type="text" id="user" placeholder="name">
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname</label>
+            <input type="text" id="surname" placeholder="surname">
+        </div>
+        <button type="button" id="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function(){
+        let name,surname;
+
+        $.getJSON('./users', function(data){
+            var items = '';
+            $.each(data, function(index, item){
+                items += '<li>' + item.name + " " + item.surname + '</li>';
+
+            });
+
+            items = '<ul>' + items + '</ul>'
+
+            $('#list').html(items)
+        });
+
+        $("#submit").click(function(){
+            name=$("#user").val();
+            surname=$("#surname").val();
+            $.post("/users",{name: name,surname: surname}, function(data){
+                if(data.added)
+                {
+                    console.log(data)
+                }
+            });
+        });
+
+    });
+</script>
+
+</body>
+</html>
